@@ -9,6 +9,7 @@ use App\Models\ContasReceber;
 use App\Models\FluxoCaixa;
 use Carbon\Carbon;
 use Closure;
+
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -18,6 +19,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\View\View;
 
 class ContasReceberResource extends Resource
 {
@@ -111,10 +113,23 @@ class ContasReceberResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                Filter::make('Aberta')
+               /* Filter::make('Aberta')
                 ->query(fn (Builder $query): Builder => $query->where('status', false)),
-                
-                SelectFilter::make('cliente')->relationship('cliente', 'nome') 
+                 SelectFilter::make('cliente')->relationship('cliente', 'nome')  */
+
+                 Tables\Filters\Filter::make('created_at')
+                 ->form([
+                     Forms\Components\DatePicker::make('created_from'),
+                     Forms\Components\DatePicker::make('created_until'),
+                 ])
+                 ->query(function ($query, array $data) {
+                     return $query
+                         ->when($data['created_from'],
+                             fn($query) => $query->whereDate('created_at', '>=', $data['created_from']))
+                         ->when($data['created_until'],
+                             fn($query) => $query->whereDate('created_at', '<=', $data['created_until']));
+                 })  
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -144,4 +159,6 @@ class ContasReceberResource extends Resource
             'index' => Pages\ManageContasRecebers::route('/'),
         ];
     }
+
+    
 }

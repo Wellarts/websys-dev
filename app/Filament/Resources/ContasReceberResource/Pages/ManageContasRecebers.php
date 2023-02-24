@@ -4,9 +4,11 @@ namespace App\Filament\Resources\ContasReceberResource\Pages;
 
 use App\Filament\Resources\ContasReceberResource;
 use App\Filament\Resources\ContasReceberResource\Widgets\ReceberStatsOverview;
+
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View;
 
 class ManageContasRecebers extends ManageRecords
 {
@@ -28,5 +30,10 @@ class ManageContasRecebers extends ManageRecords
          //   VendasMesChart::class,
         ];
     }
+
+    protected function getTableContentFooter(): View
+    {
+        return view('filament/contasReceber/footer');
+    } 
 
 }
