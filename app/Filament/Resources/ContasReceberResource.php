@@ -113,10 +113,10 @@ class ContasReceberResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-               /* Filter::make('Aberta')
+                Filter::make('Aberta')
                 ->query(fn (Builder $query): Builder => $query->where('status', false)),
-                 SelectFilter::make('cliente')->relationship('cliente', 'nome')  */
-
+                 SelectFilter::make('cliente')->relationship('cliente', 'nome')  
+                /*
                  Tables\Filters\Filter::make('created_at')
                  ->form([
                      Forms\Components\DatePicker::make('created_from'),
@@ -129,7 +129,7 @@ class ContasReceberResource extends Resource
                          ->when($data['created_until'],
                              fn($query) => $query->whereDate('created_at', '<=', $data['created_until']));
                  })  
-
+                    */
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

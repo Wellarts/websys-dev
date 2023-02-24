@@ -31,7 +31,7 @@ class ManageContasRecebers extends ManageRecords
         ];
     }
 
-    protected function getTableContentFooter(): View
+    protected function getFooter(): View
     {
         return view('filament/contasReceber/footer');
     } 
