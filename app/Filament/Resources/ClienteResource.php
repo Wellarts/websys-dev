@@ -8,6 +8,7 @@ use App\Filament\Resources\ClienteResource\Pages;
 use App\Filament\Resources\ClienteResource\RelationManagers;
 use App\Models\Cliente;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput\Mask;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ClienteResource extends Resource
 {
+    
     protected static ?string $model = Cliente::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-user-add';
@@ -53,6 +55,9 @@ class ClienteResource extends Resource
                     })
                     ->reactive(),
                 Forms\Components\TextInput::make('telefone')
+                    ->minLength(11)
+                    ->maxLength(11)
+                    ->required()
                     ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask->pattern('(00)00000-0000)'))
                     ->tel()
                     ->maxLength(255),
@@ -66,7 +71,9 @@ class ClienteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('nome')
+                ->sortable()
+                ->searchable(),
                 Tables\Columns\TextColumn::make('endereco')
                     ->label('Endereço'),
                 Tables\Columns\TextColumn::make('estado.nome')
@@ -74,7 +81,10 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('cidade.nome')
                     ->label('Cidade'),
                 Tables\Columns\TextColumn::make('telefone')
+                   
+                    ->formatStateUsing(fn (string $state) => vsprintf('(%d%d)%d%d%d%d%d-%d%d%d%d', str_split($state)))
                     ->label('Telefone'),
+                    
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email'),
                 Tables\Columns\TextColumn::make('created_at')

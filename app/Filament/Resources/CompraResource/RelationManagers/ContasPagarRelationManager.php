@@ -45,7 +45,7 @@ class ContasPagarRelationManager extends RelationManager
                 ->required(),
             Forms\Components\TextInput::make('valor_total')
                 ->label('Valor Total')
-                ->default((function ($livewire): int {
+                ->default((function ($livewire): float {
                 return $livewire->ownerRecord->valor_total;
             }))
                 ->disabled()
@@ -87,7 +87,7 @@ class ContasPagarRelationManager extends RelationManager
                 ->required(),
             Forms\Components\Toggle::make('status')
                 ->default('true')
-                ->label('Recebido')
+                ->label('Pago')
                 ->required()
                 ->reactive()
                 ->afterStateUpdated(function (Closure $get, Closure $set) {
@@ -106,11 +106,11 @@ class ContasPagarRelationManager extends RelationManager
                              }      
                  ),
             Forms\Components\TextInput::make('valor_pago')
-                ->default((function ($livewire): int {
+                ->default((function ($livewire): float {
                         return $livewire->ownerRecord->valor_total;
                 })),
             Forms\Components\TextInput::make('valor_parcela')
-                ->default((function ($livewire): int {
+                ->default((function ($livewire): float {
                         return $livewire->ownerRecord->valor_total;
                 }))
                 ->required()
@@ -126,10 +126,13 @@ class ContasPagarRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('fornecedor.nome'),
+                Tables\Columns\TextColumn::make('fornecedor.nome')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('ordem_parcela')
                     ->label('Parcela Nº'),
                 Tables\Columns\TextColumn::make('data_vencimento')
+                    ->sortable()
                     ->date(),
                 Tables\Columns\TextColumn::make('valor_total'),
                 
@@ -151,7 +154,7 @@ class ContasPagarRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                ->label('Adicionar')
+                ->label('Lançar Pagamento')
                 ->after(function ($data, $record) {
                     if($record->parcelas > 1)
                     {
@@ -169,7 +172,7 @@ class ContasPagarRelationManager extends RelationManager
                                             'data_vencimento' => $dataVencimentos,
                                             'valor_pago' => 0.00,
                                             'status' => 0,
-                                            'obs' => 'Compra...',
+                                            'obs' => $data['obs'],
                                             'valor_parcela' => $valor_parcela,
                                             ];
                                 contasPagar::create($parcelas);

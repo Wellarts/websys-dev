@@ -6,6 +6,8 @@ use App\Filament\Resources\ContasPagarResource;
 use App\Filament\Resources\ContasPagarResource\Widgets\PagarStatsOverview;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ManageRecords;
+use Illuminate\Contracts\View\View;
+
 
 class ManageContasPagars extends ManageRecords
 {
@@ -26,5 +28,10 @@ class ManageContasPagars extends ManageRecords
             PagarStatsOverview::class,
          //   VendasMesChart::class,
         ];
+    }
+
+    protected function getFooter(): View
+    {
+        return view('filament/contasPagar/footer');
     }
 }

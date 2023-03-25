@@ -17,18 +17,14 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
-use Filament\Tables\Filters\Filter;
-
 
 class UsersResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-s-user-group';
 
     protected static ?string $navigationGroup = 'Segurança';
-
-  
 
     public static function form(Form $form): Form
     {
@@ -58,27 +54,16 @@ class UsersResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
+                TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('roles.name')
             ])
             ->filters([
-                Filter::make('created_at')
-                    ->form([
-                        Forms\Components\DatePicker::make('created_from'),
-                        Forms\Components\DatePicker::make('created_until'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
-                    }),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

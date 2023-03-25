@@ -19,7 +19,7 @@ class PermissionsResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-s-finger-print';
 
     protected static ?string $navigationGroup = 'Segurança';
 
@@ -38,6 +38,8 @@ class PermissionsResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                ->sortable()
+                ->searchable(),
             ])
             ->filters([
                 //
