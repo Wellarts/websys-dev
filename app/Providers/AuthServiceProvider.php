@@ -5,6 +5,7 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Compra;
+use App\Models\Config;
 use App\Models\contasPagar;
 use App\Models\ContasReceber;
 use App\Models\FluxoCaixa;
@@ -24,7 +25,10 @@ use App\Policies\PgmtoPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Policies\VendaPolicy;
+use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -60,6 +64,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        
     }
 }
