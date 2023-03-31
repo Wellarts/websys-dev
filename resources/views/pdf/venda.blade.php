@@ -14,9 +14,8 @@
 <div class="container-sm">
     <h2>Comprovante de venda</h2>
 </div>
-
     <div class="container-sm">
-                <table class="table table-hover">
+                <table class="table table-hover" >
                     <thead align="center">
                         <td><b>Venda</b></td>
                         <td><b>Cliente</b></td>
@@ -30,40 +29,44 @@
                         <td>{{$vendas->data_venda}}</td>
                         <td>{{$vendas->formaPgmto->nome}}</td>
                         <td><label>R$</label> {{$vendas->valor_total}}</td>
-                   
-                    <tr>
-                    <td colspan="5">
-                        <table class="table table-bordered">
-                            <tr>
-                                    <thead align="center">
-                                        <td><b>Produto</b></td>
-                                        <td><b>Valor</b></td>
-                                        <td><b>Qtd</b></td>
-                                        <td><b>Desco/Acres</b></td>
-                                        <td><b>SubTotal</b></td>
-                                    </thead>
-                                </tr>
-                            <tr>                 
-                                    <tbody align="center">
-                                        @foreach ($vendas->itensVenda as $itens)
-                                            <tr> 
-                                                    <td>{{$itens->produto->nome}}</td>
-                                                    <td><label>R$</label> {{$itens->valor_venda}}</td>
-                                                    <td>{{$itens->qtd}}</td>
-                                                    <td><label>R$</label> {{$itens->desc_acres}}</td>
-                                                    <td><label>R$</label> {{$itens->sub_total}}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>    
-                            </tr>    
-                                
-                            </table>
-                        </td>
-                    </tr>
-                       
-                </tbody>
-            </table>
+                        <tr>
+                            <td colspan="5">
+                                <table class="table table-hover">
+                                    <tr>
+                                            <tbody align="center">
+                                                <td><b>Produto</b></td>
+                                                <td><b>Valor</b></td>
+                                                <td><b>Qtd</b></td>
+                                                <td><b>Desco/Acres</b></td>
+                                                <td><b>SubTotal</b></td>
+                                            </tbody>
+                                    </tr>
+                                    <tr>                 
+                                        <tbody align="center">
+                                            @foreach ($vendas->itensVenda as $itens)
+                                                <tr> 
+                                                        <td>{{$itens->produto->nome}}</td>
+                                                        <td><label>R$</label> {{$itens->valor_venda}}</td>
+                                                        <td>{{$itens->qtd}}</td>
+                                                        <td><label>R$</label> {{$itens->desc_acres}}</td>
+                                                        <td><label>R$</label> {{$itens->sub_total}}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>    
+                                </tr>    
+                                   
+                                        
+                                </table>
+                            </td>
+                        </tr>			       
+                    </tbody>    
+                    
+                 </table>
     </div>        
+               
+               
+            
+       
     
 </body>
 </html>

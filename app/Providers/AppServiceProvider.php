@@ -46,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
                     ->sort(3),
             ]);
         });
+
+        Filament::registerScripts([
+            'https://unpkg.com/@alpinejs/mask@3.x.x/dist/cdn.min.js',
+        ], true);
     }
 
 }

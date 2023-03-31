@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ItensVenda;
 use Illuminate\Http\Request;
 Use App\Models\Venda;
-Use Barryvdh\DomPDF\Facade\Pdf;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ComprovantesController extends Controller
 {
@@ -20,15 +19,26 @@ class ComprovantesController extends Controller
        
         
         
-     //  return pdf::loadView('pdf.venda', compact(['vendas']))->stream();
+     //  $pdf = Pdf::loadView('pdf.venda', compact(['vendas']))->stream();
 
-       return view('pdf.venda', compact(['vendas']));
+      
+
+    //   return $pdf->stream($pdf.'.pdf');
+
+       $view = view('pdf.venda', compact(['vendas']));
+       $pdf = PDF::loadHTML($view)->setPaper('a4');
+       return $pdf->stream();
+
+    }    
+  }    
+
+    
        
 
       
 
 
-    }
+    
 
 
-}
+
