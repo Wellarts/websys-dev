@@ -28,6 +28,8 @@ class VendaResource extends Resource
 
     protected static ?string $navigationGroup = 'Saídas';
 
+    
+
     public static function form(Form $form): Form
     {
         return $form
@@ -40,7 +42,7 @@ class VendaResource extends Resource
                         Forms\Components\Select::make('funcionario_id')
                             ->label('Vendedor')
                             ->options(Funcionario::all()->pluck('nome', 'id')->toArray())
-                            ->required(),    
+                            ->required(),
                         Forms\Components\DatePicker::make('data_venda')
                             ->label('Data da Venda')
                             ->default(now())
@@ -51,8 +53,8 @@ class VendaResource extends Resource
                             ->required(),
                         Forms\Components\Textarea::make('obs')
                             ->label('Observações'),
-                  
-                ])->columns('2')              
+
+                ])->columns('2')
 
             ]);
     }
@@ -61,18 +63,23 @@ class VendaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('cliente.nome'),
+                Tables\Columns\TextColumn::make('id')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cliente.nome')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('data_venda')
+                    ->sortable()
                     ->label('Data da Venda')
                     ->date(),
                 Tables\Columns\TextColumn::make('funcionario.nome')
-                    ->label('Vendedor'),    
+                    ->label('Vendedor'),
                 Tables\Columns\TextColumn::make('formaPgmto.nome')
                     ->label('Forma de Pagamento'),
                 Tables\Columns\TextColumn::make('valor_total')
                     ->money('BRL'),
-                 
-               
+
+
             ])
             ->filters([
                 //
@@ -85,10 +92,10 @@ class VendaResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-                
+
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -96,16 +103,16 @@ class VendaResource extends Resource
             ContasReceberRelationManager::class
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListVendas::route('/'),
             'create' => Pages\CreateVenda::route('/create'),
             'edit' => Pages\EditVenda::route('/{record}/edit'),
-            'lucro' => Pages\LucroVenda::route('/lucro'),
+            
         ];
-    }    
+    }
 
-    
+
 }

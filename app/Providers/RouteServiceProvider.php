@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Config;
+use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

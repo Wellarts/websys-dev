@@ -14,6 +14,8 @@ use Filament\Tables;
 use Filament\Widgets\Widget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Notifications\Notification; 
+use Livewire\Component;
 
 class ItensVendaRelationManager extends RelationManager
 {
@@ -40,28 +42,33 @@ class ItensVendaRelationManager extends RelationManager
                     ->label('Produto')
                     ->afterStateUpdated(function ($state, callable $set, Closure $get,) {
                         $produto = Produto::find($state);
+                       
                         if($produto) {
                             $set('valor_venda', $produto->valor_venda);
                             $set('valor_custo_atual', $produto->valor_compra);
                             $set('sub_total', (($get('qtd') * $get('valor_venda')) + (float)$get('acres_desc')));
-                                
+                            $set('estoque_atual', $produto->estoque);
+                            $set('total_custo_atual', $get('valor_custo_atual') * $get('qtd'));
                         }
-
                     }
-
-                    
                 ),
-                Forms\Components\TextInput::make('valor_venda')
-                    ->required()
+                Forms\Components\TextInput::make('estoque_atual')
+                    ->hidden(fn (string $context): bool => $context === 'edit')
                     ->disabled(),
+                
                 Forms\Components\TextInput::make('qtd')
                     ->default('1')
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(function (Closure $get, Closure $set) {
-                        $set('sub_total', (($get('qtd') * $get('valor_venda')) + (float)$get('acres_desc')));
-                    }),
-                
+                    ->afterStateUpdated(function ($state, callable $set, Closure $get,) {
+                           $set('sub_total', (($get('qtd') * $get('valor_venda')) + (float)$get('acres_desc')));
+                           $set('total_custo_atual', $get('valor_custo_atual') * $get('qtd'));
+                                
+                    }
+                ),
+                Forms\Components\TextInput::make('valor_venda')
+                    ->required()
+                    ->disabled(),
                 Forms\Components\TextInput::make('acres_desc')
                     ->label('Desconto/Acréscimo')
                     ->reactive()
@@ -72,7 +79,8 @@ class ItensVendaRelationManager extends RelationManager
                     ->disabled()
                     ->label('SubTotal'),
                 Forms\Components\Hidden::make('valor_custo_atual'),
-                    
+                Forms\Components\Hidden::make('total_custo_atual'),
+   
             ]);
     }
 
@@ -80,7 +88,9 @@ class ItensVendaRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('produto.nome'),
+                Tables\Columns\TextColumn::make('produto.nome')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('qtd'),
                 Tables\Columns\TextColumn::make('valor_venda')
                 ->money('BRL'),
@@ -96,21 +106,22 @@ class ItensVendaRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                 ->label('Adicionar')
-                ->after(function ($data) {
+                ->after(function ($data, $record) {
                     $produto = Produto::find($data['produto_id']);
-                    $venda = Venda::find($data['venda_id']);
                     $produto->estoque -= $data['qtd'];
+                    $venda = Venda::find($data['venda_id']);
                     $venda->valor_total += $data['sub_total'];
                     $venda->save();
                     $produto->save();
 
+
                 })
-                
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
                 ->before(function ($data) {
-                   
+
                      $produto = Produto::find($data['produto_id']);
                      $idItemCompra = ItensVenda::find($data['id']);
                      $venda = Venda::find($data['venda_id']);
@@ -118,8 +129,8 @@ class ItensVendaRelationManager extends RelationManager
                      $venda->valor_total += ($data['sub_total'] - $idItemCompra->sub_total);
                      $venda->save();
                      $produto->save();
-                     
-                     
+
+
                  }),
                 Tables\Actions\DeleteAction::make()
                  ->before(function ($data, $record) {
@@ -134,7 +145,7 @@ class ItensVendaRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }  
-    
-    
+    }
+
+
 }

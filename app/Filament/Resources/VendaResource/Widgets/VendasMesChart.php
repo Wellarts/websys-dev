@@ -11,6 +11,7 @@ class VendasMesChart extends LineChartWidget
 {
     protected static ?string $heading = 'Chart';
 
+    
     protected function getHeading(): string
     {
         return 'Vendas Mensal';

@@ -8,7 +8,7 @@ use App\Filament\Resources\ProdutoResource\RelationManagers\ProdutoFornecedorRel
 use App\Models\Produto;
 use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Card;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -29,26 +29,23 @@ class ProdutoResource extends Resource
         
         return $form
             ->schema([
-                Grid::make()
-                    ->schema([
-                        Forms\Components\TextInput::make('nome')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('estoque'),
-                        Forms\Components\TextInput::make('valor_compra')
-                            ->reactive()
-                            ->afterStateUpdated(function (Closure $get, Closure $set) {
-                                $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
-                            }),
-                        Forms\Components\TextInput::make('lucratividade')
-                            ->required()
-                            ->reactive()
-                            ->afterStateUpdated(function (Closure $get, Closure $set) {
-                                $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
-                            }),
-                        Forms\Components\TextInput::make('valor_venda')
-                            ->disabled(),
-                        ]),        
+                Forms\Components\TextInput::make('nome')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('estoque'),
+                Forms\Components\TextInput::make('valor_compra')
+                    ->reactive()
+                    ->afterStateUpdated(function (Closure $get, Closure $set) {
+                        $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
+                    }),
+                Forms\Components\TextInput::make('lucratividade')
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(function (Closure $get, Closure $set) {
+                        $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
+                    }),
+                Forms\Components\TextInput::make('valor_venda')
+                    ->disabled(),
                    
             ]);
     }
@@ -57,7 +54,9 @@ class ProdutoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('nome')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('estoque'),
                 Tables\Columns\TextColumn::make('valor_compra')
                     ->money('BRL'),
@@ -94,7 +93,7 @@ class ProdutoResource extends Resource
             'index' => Pages\ListProdutos::route('/'),
             'create' => Pages\CreateProduto::route('/create'),
             'edit' => Pages\EditProduto::route('/{record}/edit'),
-            'estoque' => Pages\EstoqueProdutos::route('/estoque'),
+            
         ];
     }    
 }
