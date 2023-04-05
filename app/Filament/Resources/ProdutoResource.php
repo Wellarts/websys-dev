@@ -26,27 +26,28 @@ class ProdutoResource extends Resource
 
     public static function form(Form $form): Form
     {
-        
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nome')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('estoque'),
-                Forms\Components\TextInput::make('valor_compra')
-                    ->reactive()
-                    ->afterStateUpdated(function (Closure $get, Closure $set) {
-                        $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
-                    }),
-                Forms\Components\TextInput::make('lucratividade')
-                    ->required()
-                    ->reactive()
-                    ->afterStateUpdated(function (Closure $get, Closure $set) {
-                        $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
-                    }),
-                Forms\Components\TextInput::make('valor_venda')
-                    ->disabled(),
-                   
+                Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('nome')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('estoque'),
+                        Forms\Components\TextInput::make('valor_compra')
+                            ->reactive()
+                            ->afterStateUpdated(function (Closure $get, Closure $set) {
+                                $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
+                            }),
+                        Forms\Components\TextInput::make('lucratividade')
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(function (Closure $get, Closure $set) {
+                                $set('valor_venda', ((($get('valor_compra') * $get('lucratividade'))/100) + $get('valor_compra')));
+                            }),
+                        Forms\Components\TextInput::make('valor_venda')
+                            ->disabled(),
+                ])->columns(2),
             ]);
     }
 

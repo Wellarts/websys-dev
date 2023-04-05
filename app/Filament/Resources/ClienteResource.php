@@ -15,32 +15,25 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Forms\Components\CpfCnpj;
+
 
 class ClienteResource extends Resource
 {
-
-
-
+    
     protected static ?string $model = Cliente::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-user-add';
 
     protected static ?string $navigationGroup = 'Cadastros';
 
-
-
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
                     ->required()
                     ->maxLength(255),
-             //   Forms\Components\TextInput::make('cpf_cnpj')
-              //      ->label('CPF/CNPJ')
-                  //  ->mask(fn (Forms\Components\TextInput\Mask $mask) => $mask->pattern('000.000.000-00'))
-              //      ->maxLength(50),
                 CpfCnpj::make('cpf_cnpj')
                     ->label('CPF/CNPJ')
                     ->rule('cpf_ou_cnpj'),
@@ -89,10 +82,10 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('cidade.nome')
                     ->label('Cidade'),
                 Tables\Columns\TextColumn::make('telefone')
-
+                   
                     ->formatStateUsing(fn (string $state) => vsprintf('(%d%d)%d%d%d%d%d-%d%d%d%d', str_split($state)))
                     ->label('Telefone'),
-
+                    
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -111,16 +104,11 @@ class ClienteResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
+    
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageClientes::route('/'),
         ];
-    }
-
-    
-
-
-
+    }    
 }
