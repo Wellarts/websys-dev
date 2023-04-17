@@ -10,7 +10,7 @@
 
     <title>Comprovante de Venda</title>
 </head>
-<body>
+<body >
 <div class="container-sm">
     <h2>Comprovante de venda</h2>
 </div>

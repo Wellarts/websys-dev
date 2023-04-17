@@ -40,6 +40,17 @@ class AppServiceProvider extends ServiceProvider
         Filament::registerScripts([
             'https://unpkg.com/@alpinejs/mask@3.x.x/dist/cdn.min.js',
         ], true);
+
+        Filament::serving(function () {
+            Filament::registerNavigationItems([
+                NavigationItem::make('PDV')
+                    ->url(route('PDV'), shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-presentation-chart-line')
+                    ->activeIcon('heroicon-s-presentation-chart-line')
+                    ->group('Vendas')
+                    ->sort(3),
+            ]);
+        });   
         
        
 
