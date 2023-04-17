@@ -24,7 +24,7 @@ class PDV2 extends Page implements HasForms, HasTable
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.p-d-v2';
-
+/*
     public $produto;
     public $valor_venda;
     public $qtd;
@@ -32,7 +32,7 @@ class PDV2 extends Page implements HasForms, HasTable
     public $sub_total;
     public $data;
 
-    protected $listeners = ['PDV' => '$refresh'];
+   // protected $listeners = ['PDV' => '$refresh']; */
 
 
     public function mount(): void
