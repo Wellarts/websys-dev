@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ComprovantesController;
+use App\Http\Livewire\EditPDV;
 use App\Http\Livewire\PDV;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,4 @@ Route::get('/', function () {
 
 //Route::get('pdf/{id}', [ComprovantesController::class, 'geraPDF'])->name('comprovante');
 Route::get('pdf/{id}',[ComprovantesController::class, 'geraPdf'])->name('comprovante');
-Route::get('PDV',PDV::class)->name('PDV');
+Route::get('livewire/{id}', EditPDV::class)->name('edit-PDV');

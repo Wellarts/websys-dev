@@ -9,8 +9,6 @@ class PDV extends Model
 {
     use HasFactory;
 
-    use HasFactory;
-
     protected $fillable = [
         'produto_id',
         'valor_venda',
