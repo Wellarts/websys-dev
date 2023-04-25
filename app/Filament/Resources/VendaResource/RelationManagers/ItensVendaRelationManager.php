@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VendaResource\RelationManagers;
 
 use App\Models\ItensVenda;
+use App\Models\PDV;
 use App\Models\Produto;
 use App\Models\Venda;
 use Closure;
@@ -37,6 +38,7 @@ class ItensVendaRelationManager extends RelationManager
                 Forms\Components\Select::make('produto_id')
                     ->options(Produto::all()->pluck('nome', 'id')->toArray())
                     ->disabled(fn ($context) => $context == 'edit')
+                    ->searchable()
                     ->reactive()
                     ->required()
                     ->label('Produto')
@@ -82,6 +84,21 @@ class ItensVendaRelationManager extends RelationManager
                 Forms\Components\Hidden::make('total_custo_atual'),
    
             ]);
+    }
+
+    public function updated($name, $value): void
+    {
+            if ($name === 'produto_id') {
+
+                $produto = Produto::find($value);
+                                    
+                $model = PDV::create([
+                    'produto_id' => $value,
+                    'valor_venda' => $produto->valor_venda,
+                    'qtd' => 1,
+                    'sub_total' => $produto->valor_venda * 1,
+                ]);
+            }
     }
 
     public static function table(Table $table): Table

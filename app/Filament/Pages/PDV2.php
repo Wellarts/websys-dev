@@ -110,48 +110,28 @@ class PDV2 extends Page implements HasForms, HasTable
         
     }
 
-    protected function getTableHeaderActions(): array
-    {
-        return [
-           
-                
-                
-                
-        ];
-    }
-    
-    protected function getSubmitFormAction(): Action
-        {
-            $disabled = $this->data && $this->data['my_field'] ? false : true;
-
-            return Action::make('save')
-                ->label('Save Recipients')
-                ->disabled($disabled)
-                ->submit('save')
-                ->keyBindings(['mod+s']);
-        }
-
+       
     protected function getTableBulkActions(): array
     {
         return [
-            BulkAction::make('set_new_delivery_date')
-                ->label(__('admin-panel.bulk-action.set-new-delivery-date.label'))
-                ->modalHeading(__('admin-panel.bulk-action.set-new-delivery-date.heading'))
-                ->modalSubheading(__('admin-panel.bulk-action.set-new-delivery-date.subheading'))
-                ->modalButton(__('admin-panel.bulk-action.set-new-delivery-date.button'))
-                ->icon('heroicon-o-calendar')
-                ->action(
-                    fn(Collection $records, $data) => $records->each->updateScheduleDate(
-                        Carbon::create($data['schedule_date'])
-                    )
-                )
-                ->deselectRecordsAfterCompletion()
-                ->form([
-                    Forms\Components\DatePicker::make('schedule_date')->displayFormat('D d.m.Y')
-                        ->default(now()),
-                ])
-                ->requiresConfirmation(),
+            BulkAction::make('Fechamento')
+            ->action(function (Collection $records, array $data): void {
+            
+              
+            })
+            
+            ->form([
+                Forms\Components\TextInput::make('valor_total')
+                    ->label('Valor Total'),
+                    
+                    
+                    
+            ]),
+
+            
         ];
+
+       
     }
 
    
